@@ -43,8 +43,8 @@ describe Hull::BagitHelpers do
     it 'moves the data to the temp directories' do
 
       @bagger_helper.move_data("/rand", "/hull_bagit_temp/content/")
-      expect(File).to exist("hull_bagit_temp/content/random_file.txt")
-      expect(File).to exist("hull_bagit_temp/content/description.csv")
+      expect(File).to exist("/hull_bagit_temp/content/random_file.txt")
+      expect(File).to exist("/hull_bagit_temp/content/description.csv")
 
     end
 
@@ -52,13 +52,13 @@ describe Hull::BagitHelpers do
 
       @bagger_helper.create_admin_info({:author_name => "Nev"})
 
-      expect(File).to exist("hull_bagit_temp/admin_info/admin_info.txt")
+      expect(File).to exist("/hull_bagit_temp/admin_info/admin_info.txt")
 
     end
 
     it 'processes the description file if necessary' do
       @bagger_helper.move_data("/rand", "/hull_bagit_temp/content/")
-      @bagger_helper.process_description("hull_bagit_temp/content/", {:author_name => "Nev"})
+      @bagger_helper.process_description("/hull_bagit_temp/content/", {:author_name => "Nev"})
 
       CSV.foreach("hull_bagit_temp/content/description.csv") do |row|
         expect(row[2]).to eql("Nev")
