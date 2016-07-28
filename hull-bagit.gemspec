@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Hull::Bagit::VERSION
   spec.authors       = ["Nevelina Aleksandrova"]
   spec.email         = ["nevelina@cottagelabs.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = [""]
+  spec.summary       = [""]
   spec.homepage      = ""
   spec.license       = "MIT"
 
