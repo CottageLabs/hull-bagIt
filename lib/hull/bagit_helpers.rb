@@ -9,8 +9,12 @@ module Hull
 
       #create the temporary directory
       @temp_dir = Dir.mktmpdir('/hull_bagit_temp')
-      @content_temp_dir = FileUtils::mkdir_p(@temp_dir+'/content')[0]
-      @admin_info_temp_dir = FileUtils::mkdir_p(@temp_dir+'/admin_info')[0]
+
+      @content_temp_dir = @temp_dir+'/content'
+      FileUtils::mkdir(@content_temp_dir)
+
+      @admin_info_temp_dir = @temp_dir+'/admin_info'
+      FileUtils::mkdir(@admin_info_temp_dir)
 
       return @temp_dir, @content_temp_dir, @admin_info_temp_dir
     end
@@ -25,11 +29,13 @@ module Hull
     def create_admin_info(admin_info)
       #create the admin info file in the admin info directory
       File.open(@admin_info_temp_dir+ "/admin_info.txt", "w") do |f|
-        f.write(admin_info["author_name"])
+        admin_info.each do |k,v|
+          f.puts("#{k}: #{v}")
+        end
       end
     end
 
-    def create_description(description_file_path)
+    def move_description(description_file_path)
       #if there is no description file, let the watcher specify where to get the description from
       unless File.file?(@content_temp_dir+'/description.txt') || File.file?(@content_temp_dir+'/description.csv')
         FileUtils.mv(description_file_path, @content_temp_dir)
@@ -42,7 +48,7 @@ module Hull
       if File.file?(content_directory+"/description.csv")
         CSV.open(content_directory + '/new_description.csv', 'wb') do |csv|
           CSV.foreach(content_directory+"/description.csv") do |row|
-            if row.size <= 1
+            if row.size <= 1 || (row[1] == "" && row[2] == "")
               new_row = [row[0], admin_info[:author_name] + "_" + DateTime.now.strftime("%d-%b%Y"), admin_info[:author_name]]
               csv << new_row
             end

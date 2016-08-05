@@ -29,22 +29,24 @@ describe Hull::BagitHelpers do
         end
       end
 
-      @bagger_helper.create_temp_directory
+      @temp_dir, @content_temp_dir, @admin_info_temp_dir = @bagger_helper.create_temp_directory
     end
 
     it 'creates the temporary directories' do
 
-      expect(File).to exist("hull_bagit_temp")
-      expect(File).to exist("hull_bagit_temp/content")
-      expect(File).to exist("hull_bagit_temp/admin_info")
+      expect(File).to exist(@temp_dir)
+      expect(File).to exist(@temp_dir + "/content")
+      expect(File).to exist(@temp_dir + "/admin_info")
+      expect(@content_temp_dir).to eql(@temp_dir + "/content")
+      expect(@admin_info_temp_dir).to eql(@temp_dir + "/admin_info")
 
     end
 
     it 'moves the data to the temp directories' do
 
-      @bagger_helper.move_data("/rand", "/hull_bagit_temp/content/")
-      expect(File).to exist("/hull_bagit_temp/content/random_file.txt")
-      expect(File).to exist("/hull_bagit_temp/content/description.csv")
+      @bagger_helper.move_data("/rand", @content_temp_dir)
+      expect(File).to exist(@content_temp_dir + "/random_file.txt")
+      expect(File).to exist(@content_temp_dir + "/description.csv")
 
     end
 
@@ -52,15 +54,15 @@ describe Hull::BagitHelpers do
 
       @bagger_helper.create_admin_info({:author_name => "Nev"})
 
-      expect(File).to exist("/hull_bagit_temp/admin_info/admin_info.txt")
+      expect(File).to exist(@admin_info_temp_dir + "/admin_info.txt")
 
     end
 
     it 'processes the description file if necessary' do
-      @bagger_helper.move_data("/rand", "/hull_bagit_temp/content/")
-      @bagger_helper.process_description("/hull_bagit_temp/content/", {:author_name => "Nev"})
+      @bagger_helper.move_data("/rand", @content_temp_dir)
+      @bagger_helper.process_description(@content_temp_dir, {:author_name => "Nev"})
 
-      CSV.foreach("hull_bagit_temp/content/description.csv") do |row|
+      CSV.foreach(@content_temp_dir + "/description.csv") do |row|
         expect(row[2]).to eql("Nev")
       end
     end
