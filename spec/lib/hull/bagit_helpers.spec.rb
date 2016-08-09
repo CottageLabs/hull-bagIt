@@ -58,7 +58,7 @@ describe Hull::BagitHelpers do
 
     end
 
-    it 'processes the description file if necessary' do
+    it 'processes the description file when necessary' do
       @bagger_helper.move_data("/rand", @content_temp_dir)
       @bagger_helper.process_description(@content_temp_dir, {:author_name => "Nev"})
 

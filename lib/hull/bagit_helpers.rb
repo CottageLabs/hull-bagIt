@@ -37,19 +37,23 @@ module Hull
 
     def move_description(description_file_path)
       #if there is no description file, let the watcher specify where to get the description from
-      unless File.file?(@content_temp_dir+'/description.txt') || File.file?(@content_temp_dir+'/description.csv')
+      unless File.file?(File.join(@content_temp_dir,'/description.txt')) || File.file?(File.join(@content_temp_dir,'/description.csv'))
         FileUtils.mv(description_file_path, @content_temp_dir)
       end
     end
 
     def process_description(content_directory, admin_info)
 
+      unless File.file?(File.join(content_directory,'/description.txt')) || File.file?(File.join(content_directory,'/description.csv'))
+        raise "Couldn't find a description file."
+      end
+
       #reads in description.csv and updates it if necessary
       if File.file?(content_directory+"/description.csv")
         CSV.open(content_directory + '/new_description.csv', 'wb') do |csv|
           CSV.foreach(content_directory+"/description.csv") do |row|
             if row.size <= 1 || (row[1] == "" && row[2] == "")
-              new_row = [row[0], admin_info[:author_name] + "_" + DateTime.now.strftime("%d-%b%Y"), admin_info[:author_name]]
+              new_row = [row[0], admin_info[:author_name] + "_" + DateTime.now.strftime("%d-%b-%Y"), admin_info[:author_name]]
               csv << new_row
             end
           end

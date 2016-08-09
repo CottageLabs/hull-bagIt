@@ -7,6 +7,14 @@ class HullBagit
 
   def initialize(path, admin_info, description_file_path=nil)
 
+    unless Dir.exists?(path)
+      raise "#{path} is not a directory"
+    end
+
+    if Dir.entries(path).include? "data"
+      raise "There already is a bag at #{path}"
+    end
+
     @temp_dir, @content_temp_dir, @admin_info_temp_dir = create_temp_directory
     move_data(path, @content_temp_dir)
     create_admin_info(admin_info)
@@ -36,10 +44,14 @@ class HullBagit
     bag.manifest!
 
     bag
-
   end
 
   def self.read(bag_path)
+
+    unless Dir.entries(bag_path).include? "data"
+      raise "There is no bag at #{bag_path}."
+    end
+
     bag_info = {}
     bag_info[:admin_info] = self.get_admin_info(bag_path)
     bag_info[:description] = self.get_description(bag_path)
