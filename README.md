@@ -1,4 +1,4 @@
-# Hull::Bagit
+# HullBagit
 
 This gem creates a Bag from a directory following University of Hull structure requirements.
 
@@ -20,8 +20,8 @@ And then execute:
     # Any admin information should come as a hash after the path.
     bag = HullBagit.new(dir_name, {:author_name => "Author"})
     
-    # if there is no description file in the directory to bag, you can supply a path from which the library should take
-    # the description
+    # if there is no description file in the directory to bag, you can supply a path from 
+    # which the library should take the description
     bag = HullBagit.new(dir_name, {:author_name => "Author Name"}, description_file_path=path)
     
     # to examine the bag
