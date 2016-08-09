@@ -1,24 +1,37 @@
 # Hull::Bagit
 
-TODO: Write a gem description
+This gem creates a Bag from a directory following University of Hull structure requirements.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'hull-bagit'
+    gem 'hull-bagit', :git => "https://github.com/CottageLabs/hull-bagit", :branch => "master"
 
 And then execute:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install hull-bagit
+    $ bundle install
 
 ## Usage
 
-TODO: Write usage instructions here
+    require 'hull-bagit'
+    
+    # supply the directory you wish bagged. 
+    # Any admin information should come as a hash after the path.
+    bag = HullBagit.new(dir_name, {:author_name => "Author"})
+    
+    # if there is no description file in the directory to bag, you can supply a path from which the library should take
+    # the description
+    bag = HullBagit.new(dir_name, {:author_name => "Author Name"}, description_file_path=path)
+    
+    # to examine the bag
+    bag_info = HullBagit.read(path_to_bag)
+    
+    # this returns a hash with the following keys:
+    # bag_info[:content] - list of all the content file paths
+    # bag_info[:admin_info] - list of all the lines in the admin txt
+    # bag_info[:description] - list of all the lines in the description file.    
+    
 
 ## Contributing
 
